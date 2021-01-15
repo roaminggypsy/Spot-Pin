@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import MapGL, { NavigationControl, Marker } from 'react-map-gl';
 import { withStyles } from '@material-ui/core/styles';
 // import Button from "@material-ui/core/Button";
 // import Typography from "@material-ui/core/Typography";
 // import DeleteIcon from "@material-ui/icons/DeleteTwoTone";
 import PinIcon from './PinIcon';
+import Context from '../context';
+import Blog from './Blog';
 
 const INITIAL_VIEWPORT = {
   latitude: 37.7577,
@@ -13,6 +15,7 @@ const INITIAL_VIEWPORT = {
 };
 
 const Map = ({ classes }) => {
+  const { state, dispatch } = useContext(Context);
   const [viewport, setViewport] = useState({
     latitude: 37.8,
     longitude: -122.4,
@@ -37,34 +40,67 @@ const Map = ({ classes }) => {
     }
   };
 
-  return (
-    <MapGL
-      {...viewport}
-      width='100vw'
-      height='100vh'
-      mapStyle='mapbox://styles/mapbox/dark-v9'
-      mapboxApiAccessToken='pk.eyJ1IjoibGlwYWR1cGEiLCJhIjoiY2tqd2YzbWQwMDk2cTJ5cGYwdGVnam5nYyJ9.J15bYPm3-NnsFxPXUCSJbw'
-      onViewportChange={(newViewport) => setViewport(newViewport)}
-    >
-      {/* /Navigation Control */}
-      <div className={classes.navigationControl}>
-        <NavigationControl
-          onViewportChange={(newViewport) => setViewport(newViewport)}
-        />
-      </div>
+  const handleMapClick = ({ lngLat, leftButton }) => {
+    if (!leftButton) {
+      return;
+    }
+    if (!state.draft) {
+      dispatch({ type: 'CREATE_DRAFT' });
+    }
 
-      {/* Pin for User's Current Pos */}
-      {userPos && (
-        <Marker
-          latitude={userPos.latitude}
-          longitude={userPos.longitude}
-          offsetLeft={-19}
-          offsetTop={-37}
-        >
-          <PinIcon size={40} color='red' />
-        </Marker>
-      )}
-    </MapGL>
+    const [longitude, latitude] = lngLat;
+    dispatch({
+      type: 'UPDATE_DRAFT_LOCATION',
+      payload: { longitude, latitude },
+    });
+  };
+
+  return (
+    <div className={classes.root}>
+      <MapGL
+        {...viewport}
+        width='100vw'
+        height='100vh'
+        mapStyle='mapbox://styles/mapbox/dark-v9'
+        mapboxApiAccessToken='pk.eyJ1IjoibGlwYWR1cGEiLCJhIjoiY2tqd2YzbWQwMDk2cTJ5cGYwdGVnam5nYyJ9.J15bYPm3-NnsFxPXUCSJbw'
+        onViewportChange={(newViewport) => setViewport(newViewport)}
+        onClick={handleMapClick}
+      >
+        {/* /Navigation Control */}
+        <div className={classes.navigationControl}>
+          <NavigationControl
+            onViewportChange={(newViewport) => setViewport(newViewport)}
+          />
+        </div>
+
+        {/* Pin for User's Current Pos */}
+        {userPos && (
+          <Marker
+            latitude={userPos.latitude}
+            longitude={userPos.longitude}
+            offsetLeft={-19}
+            offsetTop={-37}
+          >
+            <PinIcon size={40} color='red' />
+          </Marker>
+        )}
+
+        {/* Draft Pin */}
+        {state.draft && (
+          <Marker
+            latitude={state.draft.latitude}
+            longitude={state.draft.longitude}
+            offsetLeft={-19}
+            offsetTop={-37}
+          >
+            <PinIcon size={40} color='hotpink' />
+          </Marker>
+        )}
+      </MapGL>
+
+      {/* Blog Area to add Pin Content*/}
+      <Blog />
+    </div>
   );
 };
 
