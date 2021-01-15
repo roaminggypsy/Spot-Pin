@@ -8,6 +8,7 @@ import LandscapeIcon from '@material-ui/icons/LandscapeOutlined';
 import ClearIcon from '@material-ui/icons/Clear';
 import SaveIcon from '@material-ui/icons/SaveTwoTone';
 import Context from '../../context';
+import axios from 'axios';
 
 const CreatePin = ({ classes }) => {
   const { dispatch } = useContext(Context);
@@ -15,9 +16,22 @@ const CreatePin = ({ classes }) => {
   const [image, setImage] = useState('');
   const [content, setContent] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleImageUpload = async () => {
+    const data = new FormData();
+    data.append('file', image);
+    data.append('upload_preset', 'placepins');
+    data.append('cloud_name', 'lipadupa');
+    const res = await axios.post(
+      'https://api.cloudinary.com/v1_1/lipadupa/image/upload',
+      data
+    );
+    return res.data.url;
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log({ title, image, content });
+    const url = await handleImageUpload();
+    console.log({ title, image, content, url });
   };
 
   const handleDeleteDraft = () => {
