@@ -4,6 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 // import Button from "@material-ui/core/Button";
 // import Typography from "@material-ui/core/Typography";
 // import DeleteIcon from "@material-ui/icons/DeleteTwoTone";
+import { useClient } from '../client';
+import { GET_PINS_QUERY } from '../graphql/queries';
 import PinIcon from './PinIcon';
 import Context from '../context';
 import Blog from './Blog';
@@ -15,7 +17,9 @@ const INITIAL_VIEWPORT = {
 };
 
 const Map = ({ classes }) => {
+  const client = useClient();
   const { state, dispatch } = useContext(Context);
+
   const [viewport, setViewport] = useState({
     latitude: 37.8,
     longitude: -122.4,
@@ -29,6 +33,16 @@ const Map = ({ classes }) => {
   useEffect(() => {
     getUserPos();
   }, []);
+
+  useEffect(() => {
+    getPins();
+  }, []);
+
+  const getPins = async () => {
+    const { getPins } = await client.request(GET_PINS_QUERY);
+    dispatch({ type: 'GET_PINS', payload: getPins });
+    console.log({ getPins });
+  };
 
   const getUserPos = () => {
     if ('geolocation' in navigator) {
@@ -96,6 +110,19 @@ const Map = ({ classes }) => {
             <PinIcon size={40} color='hotpink' />
           </Marker>
         )}
+
+        {/* Created Pins */}
+        {state.pins.map((pin) => (
+          <Marker
+            key={pin._id}
+            latitude={pin.latitude}
+            longitude={pin.longitude}
+            offsetLeft={-19}
+            offsetTop={-37}
+          >
+            <PinIcon size={40} color='darkblue' />
+          </Marker>
+        ))}
       </MapGL>
 
       {/* Blog Area to add Pin Content*/}
