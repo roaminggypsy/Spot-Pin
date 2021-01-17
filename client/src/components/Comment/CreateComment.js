@@ -16,11 +16,7 @@ const CreateComment = ({ classes }) => {
 
   const handleSubmitComment = async () => {
     const variables = { pinId: state.currentPin._id, text: comment };
-    const { createComment } = await client.request(
-      CREATE_COMMENT_MUTATION,
-      variables
-    );
-    dispatch({ type: 'CREATE_COMMENT', payload: createComment });
+    await client.request(CREATE_COMMENT_MUTATION, variables);
     setComment('');
   };
   return (
@@ -43,7 +39,7 @@ const CreateComment = ({ classes }) => {
         <IconButton
           onClick={handleSubmitComment}
           disabled={!comment.trim()}
-          lassName={classes.clearButton}
+          className={classes.clearButton}
         >
           <SendIcon />
         </IconButton>
