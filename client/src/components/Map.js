@@ -17,6 +17,7 @@ import {
   PIN_UPDATED_SUBSCRIPTION,
   PIN_DELETED_SUBSCRIPTION,
 } from '../graphql/subscriptions';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const INITIAL_VIEWPORT = {
   latitude: 37.7577,
@@ -26,6 +27,7 @@ const INITIAL_VIEWPORT = {
 
 const Map = ({ classes }) => {
   const client = useClient();
+  const mobileSize = useMediaQuery('(max-width: 650px)');
   const { state, dispatch } = useContext(Context);
   useEffect(() => {
     getPins();
@@ -99,13 +101,14 @@ const Map = ({ classes }) => {
   const isAuthUser = () => state.currentUser._id === popup.author._id;
 
   return (
-    <div className={classes.root}>
+    <div className={mobileSize ? classes.rootMobile : classes.root}>
       <MapGL
         {...viewport}
         width='100vw'
         height='100vh'
         mapStyle='mapbox://styles/mapbox/dark-v9'
         mapboxApiAccessToken='pk.eyJ1IjoibGlwYWR1cGEiLCJhIjoiY2tqd2YzbWQwMDk2cTJ5cGYwdGVnam5nYyJ9.J15bYPm3-NnsFxPXUCSJbw'
+        scrollZoom={!mobileSize}
         onViewportChange={(newViewport) => setViewport(newViewport)}
         onClick={handleMapClick}
       >

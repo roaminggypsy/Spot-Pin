@@ -11,8 +11,10 @@ import Context from '../../context';
 import { CREATE_PIN_MUTATION } from '../../graphql/mutations';
 import axios from 'axios';
 import { useClient } from '../../client';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const CreatePin = ({ classes }) => {
+  const mobileSize = useMediaQuery('(max-width: 650px');
   const client = useClient();
   const { state, dispatch } = useContext(Context);
   const [title, setTitle] = useState('');
@@ -97,7 +99,7 @@ const CreatePin = ({ classes }) => {
           name='content'
           label='Content'
           multiline
-          rows='6'
+          rows={mobileSize ? '3' : '6'}
           margin='normal'
           fullWidth
           variant='outlined'
