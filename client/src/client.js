@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 export const BASE_URL =
   process.env.NODE_ENV === 'production'
-    ? '<production-url>'
+    ? 'https://placepins.herokuapp.com/graphql'
     : 'http://localhost:4000/graphql';
 
 export const useClient = () => {

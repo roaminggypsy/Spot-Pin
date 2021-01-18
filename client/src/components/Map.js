@@ -51,11 +51,11 @@ const Map = ({ classes }) => {
   // remove popup if pin itself is detected by the author of the pin
   useEffect(() => {
     const pinExists =
-      popup & (state.pins.findIndex((pin) => pin._id === popup._id) > -1);
+      popup && state.pins.findIndex((pin) => pin._id === popup._id) > -1;
     if (!pinExists) {
       setPopup(null);
     }
-  }, [state.pin.length]);
+  }, [state.pins.length]);
 
   const getPins = async () => {
     const { getPins } = await client.request(GET_PINS_QUERY);
