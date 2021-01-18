@@ -27,7 +27,8 @@
 
 ## 🧐 About <a name = "about"></a>
 
-An social network where users can pin places, add text & images, and comment
+An social network where users can pin places, add text & images, and comment.  
+GraphQL is used throughout this project.
 <img src='https://res.cloudinary.com/lipadupa/image/upload/v1610937485/Teampaper_Snap_2021-01-17_18-35-52_pcaztd.png'>
 <img src='https://res.cloudinary.com/lipadupa/image/upload/v1610937485/Google_Chrome_2021-01-17_18-36-41_gqwa9z.png'>
 <img src='https://res.cloudinary.com/lipadupa/image/upload/v1610937486/Google_Chrome_2021-01-17_18-37-07_umbfip.png'>
