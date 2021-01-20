@@ -82,18 +82,13 @@ MongoDB (mongoose)
 ### Frontend:
 
 Material UI  
-apollo-cache-inmemory  
-apollo-client  
-apollo-link-ws  
 axios  
 date-fns  
-graphql  
-graphql-request  
+graphql-request (yes)
 graphql-tag  
 react  
-react-apollo  
 react-dom  
-react-google-login  
+react-google-login (yes)
 react-map-gl  
 react-router-dom  
 subscriptions-transport-ws
